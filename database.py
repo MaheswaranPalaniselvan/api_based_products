@@ -10,16 +10,19 @@ with open('config.json') as config_file:
 DATABASE_URL = f"mysql+pymysql://{config['database']['username']}:{config['database']['password']}@{config['database']['host']}/{config['database']['database']}"
 
 
+
+# Create database engine
 engine = create_engine(DATABASE_URL)
+
+# Create a session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Base class for models
 Base = declarative_base()
 
-def init_db():
-    Base.metadata.create_all(bind=engine)
-
-def get_db(): 
-    db = SessionLocal() 
-    try: 
-        yield db 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
     finally:
         db.close()
